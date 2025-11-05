@@ -12,7 +12,7 @@ Model name is converted to lowercase for the collection name:
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, Dict
 
 # Example schemas (replace with your own):
 
@@ -41,8 +41,12 @@ class Product(BaseModel):
 # Add your own schemas here:
 # --------------------------------------------------
 
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+class DailyEntry(BaseModel):
+    """
+    Daily tracker entries for habits and meals
+    Collection name: "dailyentry"
+    """
+    date: str = Field(..., description="ISO date YYYY-MM-DD")
+    warmup: Dict[str, bool] = Field(default_factory=dict, description="Warm-up checklist by item id")
+    food: Dict[str, bool] = Field(default_factory=dict, description="Food checklist by item id")
+    notes: Optional[str] = Field(None, description="Optional daily notes")
